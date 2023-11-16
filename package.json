@@ -1,0 +1,25 @@
+{
+  "name": "nifty-lambda",
+  "version": "1.0.0",
+  "description": "Simple Web Application with React, Nest.js, AWS Lambda, and",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "AWS",
+    "Lambda",
+    "DynamoDB",
+    "Nest.js"
+  ],
+  "author": "Imrul Kais Khan",
+  "license": "MIT ",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.451.0",
+    "@aws-sdk/util-dynamodb": "^3.451.0"
+  },
+  "devDependencies": {
+    "serverless-iam-roles-per-function": "^3.2.0"
+  }
+}
