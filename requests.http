@@ -10,3 +10,29 @@ GET {{host}}/post/{{postId}}
 ###
 # Get all Posts
 GET {{host}}/posts
+
+###
+# Create a post
+POST {{host}}/post
+Content-Type: application/json
+
+{
+    "postId": "1", 
+    "content": "random content",
+    "author": "author 1"
+}
+
+###
+# Update a post
+PUT {{host}}/post/{{postId}}
+Content-Type: application/json
+
+{ 
+    "content": "random content",
+    "author": "author 1",
+    "views": 1
+}
+
+###
+# Delete a Post
+DELETE {{host}}/post/{{postId}}
