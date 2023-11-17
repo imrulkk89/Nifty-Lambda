@@ -24,7 +24,7 @@ const getPost = async (event) => {
         console.log((Item))
 
         response.body = JSON.stringify({
-            message: "Successfully created post.",
+            message: "Successfully retrieved post.",
             data: (Item) ? unmarshall(Item) : {},
             rawData: (Item) ? Item : ''
         })
@@ -144,7 +144,7 @@ const deletePost = async (event) => {
     return response
 }
 
-const getAllPost = async (event) => {
+const getAllPosts = async (event) => {
     const response = { statusCode: 200 }
 
     try {
@@ -175,5 +175,5 @@ module.exports = {
     createPost,
     updatePost,
     deletePost,
-    getAllPost
+    getAllPosts
 }

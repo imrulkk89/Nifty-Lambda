@@ -1,0 +1,12 @@
+# Constants
+@host = https://osce6x38cg.execute-api.ap-southeast-1.amazonaws.com/dev
+
+# Get a post by postId
+
+@postId = 1 
+
+GET {{host}}/post/{{postId}}
+
+###
+# Get all Posts
+GET {{host}}/posts
