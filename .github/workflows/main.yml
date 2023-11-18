@@ -3,16 +3,13 @@ name: Deploy Nifty Lambda
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch
 on:
-  pull_request:
-    branches:
-      - main
-    types: [closed]
+  push:
+    branches: [deploy]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "deploy"
   deploy:
-    if: ${{ github.event.pull_request.merged }}
     name: deploy
 
     # The type of runner that the job will run on
