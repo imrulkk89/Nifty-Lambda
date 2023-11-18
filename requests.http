@@ -1,0 +1,4 @@
+@host = https://l43rdefepg.execute-api.ap-southeast-1.amazonaws.com
+
+###
+GET {{host}}
