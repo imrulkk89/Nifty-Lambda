@@ -1,18 +1,28 @@
-import { configure as serverlessExpress } from '@vendia/serverless-express';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Handler, Context } from 'aws-lambda';
+//import cookieParser from 'cookie-parser';
+import serverlessExpress from '@vendia/serverless-express';
+import { Callback, Context, Handler } from 'aws-lambda';
+
 import { AppModule } from './app.module';
 
-let cachedServer: any;
+let server: Handler;
 
-export const handler: Handler = async (event: any, context: Context) => {
-  if (!cachedServer) {
-    const nestApp = await NestFactory.create(AppModule);
-    await nestApp.init();
-    cachedServer = serverlessExpress({
-      app: nestApp.getHttpAdapter().getInstance(),
-    });
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  //app.use(cookieParser());
+  await app.init();
 
-    return cachedServer(event, context);
-  }
+  const expressApp = app.getHttpAdapter().getInstance();
+  return serverlessExpress({ app: expressApp });
+}
+
+export const handler: Handler = async (
+  event: any,
+  context: Context,
+  callback: Callback,
+) => {
+  server = server ?? (await bootstrap());
+  return server(event, context, callback);
 };
