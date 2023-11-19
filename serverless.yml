@@ -12,10 +12,10 @@ provider:
   logRetentionInDays: 1
   timeout: 15
   environment:
-     DYNAMODB_TABLE_NAME: ${self:custom.userTableName}
+     DYNAMODB_TABLE_NAME: ${self:custom.usersTableName}
 
 custom:
-  userTableName: users-table-${self:provider.stage}
+  usersTableName: users-table-${self:provider.stage}
 
 functions:
   api:
@@ -24,13 +24,23 @@ functions:
       - httpApi:
           method: any
           path: /{proxy+}
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - 'dynamodb:Query'
+          - 'dynamodb:Scan'
+          - 'dynamodb:GetItem'
+          - 'dynamodb:PutItem'
+          - 'dynamodb:UpdateItem'
+          - 'dynamodb:DeleteItem'
+        Resource: !GetAtt usersTable.Arn
 
 resources:
   Resources:
-    PostsTable:
+    usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.userTableName}
+        TableName: ${self:custom.usersTableName}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
