@@ -11,6 +11,11 @@ provider:
   memorySize: 512
   logRetentionInDays: 1
   timeout: 15
+  environment:
+     DYNAMODB_TABLE_NAME: ${self:custom.userTableName}
+
+custom:
+  userTableName: users-table-${self:provider.stage}
 
 functions:
   api:
@@ -19,6 +24,22 @@ functions:
       - httpApi:
           method: any
           path: /{proxy+}
+
+resources:
+  Resources:
+    PostsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.userTableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 plugins:
   - serverless-jetpack
