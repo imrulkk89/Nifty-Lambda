@@ -19,6 +19,13 @@ export class UsersRepository {
 
     const { Items } = await this.client.send(command);
 
-    return Items.map((item) => unmarshall(item));
+    return Items.map((item) => {
+      const data = unmarshall(item);
+      return {
+        ...data,
+        createdAt: new Date(Number(data.createdAt)),
+        updatedAt: new Date(Number(data.updatedAt)),
+      };
+    });
   }
 }

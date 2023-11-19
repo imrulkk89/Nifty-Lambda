@@ -1,4 +1,8 @@
-@host = https://l43rdefepg.execute-api.ap-southeast-1.amazonaws.com
+@host = https://sl0jjaozm9.execute-api.ap-southeast-1.amazonaws.com
 
 ###
 GET {{host}}
+
+###
+# Get all users
+GET {{host}}/users
