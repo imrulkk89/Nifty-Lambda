@@ -1,7 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
-//import { User } from './entities/user.entity';
+import {
+  DynamoDBClient,
+  ScanCommand,
+  GetItemCommand,
+  PutItemCommand,
+  UpdateItemCommand,
+  DeleteItemCommand,
+} from '@aws-sdk/client-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+//import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -10,6 +19,15 @@ export class UsersRepository {
 
   constructor() {
     this.client = new DynamoDBClient({});
+  }
+
+  async create(data: CreateUserDto): Promise<any> {
+    const command = new PutItemCommand({
+      TableName: this.tableName,
+      Item: marshall(data) || {},
+    });
+
+    return await this.client.send(command);
   }
 
   async findAll(): Promise<any> {
@@ -27,5 +45,56 @@ export class UsersRepository {
         updatedAt: new Date(Number(data.updatedAt)),
       };
     });
+  }
+
+  async findById(id: string): Promise<any> {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: marshall({ userId: id }),
+    });
+
+    const { Item } = await this.client.send(command);
+
+    return Item ? unmarshall(Item) : {};
+  }
+
+  async update(data: User): Promise<any> {
+    const body = JSON.stringify(data);
+    const objKeys = Object.keys(body);
+
+    const command = new UpdateItemCommand({
+      TableName: this.tableName,
+      Key: marshall({ userId: data.userId }),
+      UpdateExpression: `SET ${objKeys
+        .map((_, index) => `#key${index} = :value${index}`)
+        .join(', ')}`,
+      ExpressionAttributeNames: objKeys.reduce(
+        (acc, key, index) => ({
+          ...acc,
+          [`#key${index}`]: key,
+        }),
+        {},
+      ),
+      ExpressionAttributeValues: marshall(
+        objKeys.reduce(
+          (acc, key, index) => ({
+            ...acc,
+            [`:value${index}`]: body[key],
+          }),
+          {},
+        ),
+      ),
+    });
+
+    return await this.client.send(command);
+  }
+
+  async deleteById(id: string): Promise<any> {
+    const command = new DeleteItemCommand({
+      TableName: this.tableName,
+      Key: marshall({ userId: id }),
+    });
+
+    return await this.client.send(command);
   }
 }

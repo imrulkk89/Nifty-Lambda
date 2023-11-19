@@ -6,3 +6,21 @@ GET {{host}}
 ###
 # Get all users
 GET {{host}}/users
+
+###
+# Get a single user
+GET {{host}}/users/383e61f8-86d6-11ee-a9a6-325096b39f47
+
+###
+# Create a User
+POST {{host}}/users
+Content-Type: application/json
+
+{
+    "name": "kamrunnaher kanan",
+    "email": "kanan@gmail.com"
+}
+
+###
+# Delete a user
+DELETE {{host}}/users/383e61f8-86d6-11ee-a9a6-325096b39f47
