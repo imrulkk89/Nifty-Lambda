@@ -27,8 +27,8 @@ export class UsersRepository {
       userId: uuidv4(),
       name: data.name,
       email: data.email,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: Number(new Date()),
+      updatedAt: Number(new Date()),
     };
 
     const command = new PutItemCommand({
