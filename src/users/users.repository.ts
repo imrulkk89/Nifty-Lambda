@@ -8,6 +8,7 @@ import {
   DeleteItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { v4 as uuidv4 } from 'uuid';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 //import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,9 +23,17 @@ export class UsersRepository {
   }
 
   async create(data: CreateUserDto): Promise<any> {
+    const user: User = {
+      userId: uuidv4(),
+      name: data.name,
+      email: data.email,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
     const command = new PutItemCommand({
       TableName: this.tableName,
-      Item: marshall(data) || {},
+      Item: marshall(user) || {},
     });
 
     return await this.client.send(command);
@@ -54,8 +63,17 @@ export class UsersRepository {
     });
 
     const { Item } = await this.client.send(command);
+    let user = Item ? unmarshall(Item) : {};
 
-    return Item ? unmarshall(Item) : {};
+    if (Object.keys(user).length !== 0) {
+      user = {
+        ...user,
+        createdAt: new Date(Number(user.createdAt)),
+        updatedAt: new Date(Number(user.updatedAt)),
+      };
+    }
+
+    return user;
   }
 
   async update(data: User): Promise<any> {
