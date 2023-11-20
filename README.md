@@ -1,73 +1,60 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Simple Web Application with React, Nest.js, AWS Lambda, and DynamoDB
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**Objective:** A minimalistic web application with a React front-end and a
+Nest.js backend running on AWS Lambda, using DynamoDB for database operations.
+The app is capable of doing basic CRUD operations of user data.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Description**: This project is build using `NestJs` and it's deployed in `AWS Lambda` with the help of `Github Action`, [serverless framework](https://www.serverless.com/) and `Continuous Deployment` strategy. 
 
-## Description
+1. `Github Action` code: `.github/workflows/main.yml` 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+2. `serverless` code: `serverless.yml` in the `root folder`.
 
-## Installation
+**Lambda Function** start point is defined in `src/lambda.ts` file.
 
-```bash
-$ yarn install
+# Setup Guide
+1. We need to add `AWS Access Key ID` and `AWS Secret Acess Key` to `Github's`.
+   
+   To do so, go to **github-repo -> Settings -> Secrets and variables**  menu and add `AWS_ACCESS_KEY_ID` and `AWS_SECRECT_ACCESS_KEY` 
+
+   ![Github Secrets and variables](img/aws_secrets.png)
+
+2. We also need to provide following **IAM permissions** to the AWS user.
+   
+   ![](img/IAMs.png)
+
+# Deployment
+**Github action** will be triggered if anything pushes in `deploy` branch and this will provisioned the total `Lambda Architecture` according to the definition of `serverless.yml` file.
+
+A **DynamoDB** table will be created by the rules defined in `serverless.yml` file.
+
+```yml
+.....
+  ...
+   environment:
+     DYNAMODB_TABLE_NAME: ${self:custom.usersTableName}
+
+custom:
+  usersTableName: users-table-${self:provider.stage}
+.....
 ```
+As we `deployed` the **system** in `dev` environment, our table name would be `users-table-dev`.
 
-## Running the app
+Also the `API Gateway` will be created and an **API Endpoint** will be provided after **Github Action** finished. 
 
-```bash
-# development
-$ yarn run start
+**Go To**: `<repo menu> -> Actions -> <latest-commit>`
 
-# watch mode
-$ yarn run start:dev
+**API Gateway Endpoint**:
 
-# production mode
-$ yarn run start:prod
-```
+![api gateway endpoint](img/API_GW_EP.png)
 
-## Test
+Finally need to enable **CORS** in `API Gateway Endpoint` in **AWS**. 
 
-```bash
-# unit tests
-$ yarn run test
+![cors setting in api gw](img/CORS.png)
 
-# e2e tests
-$ yarn run test:e2e
+# APIs
+All the APIs are listed in `request.http` file in the `root folder`.
 
-# test coverage
-$ yarn run test:cov
-```
+API calls can be performed from `VS Code` if `REST Client` **Extension** is installed.
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+![REST Client](img/rest_client.png)
