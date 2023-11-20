@@ -58,3 +58,8 @@ All the APIs are listed in `requests.http` file in the `root folder`.
 API calls can be performed from `VS Code` if `REST Client` **Extension** is installed.
 
 ![REST Client](img/rest_client.png)
+
+# Frontend
+**Frontend repo**: https://github.com/imrulkk89/nifty-frontend
+
+**Frontend URL**: https://imrulkk89.github.io/nifty-frontend
