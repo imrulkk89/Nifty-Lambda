@@ -17,7 +17,7 @@ export class UsersService {
   async findAll(): Promise<any> {
     const result = await this.repository.findAll();
     return {
-      httpStatusCode: result.$metadata.httpStatusCode || 200,
+      httpStatusCode: result.$metadata ? result.$metadata.httpStatusCode : 200,
       data: result,
     };
   }
@@ -25,7 +25,7 @@ export class UsersService {
   async findOne(id: string): Promise<any> {
     const result = await this.repository.findById(id);
     return {
-      httpStatusCode: result.$metadata.httpStatusCode || 200,
+      httpStatusCode: result.$metadata ? result.$metadata.httpStatusCode : 200,
       data: result,
     };
   }
