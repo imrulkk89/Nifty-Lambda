@@ -53,7 +53,7 @@ Finally need to enable **CORS** in `API Gateway Endpoint` in **AWS**.
 ![cors setting in api gw](img/CORS.png)
 
 # APIs
-All the APIs are listed in `request.http` file in the `root folder`.
+All the APIs are listed in `requests.http` file in the `root folder`.
 
 API calls can be performed from `VS Code` if `REST Client` **Extension** is installed.
 
