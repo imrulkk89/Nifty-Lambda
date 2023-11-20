@@ -10,7 +10,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<any> {
     const result = await this.repository.create(createUserDto);
     return {
-      httpstatusCode: result.$metadata.httpStatusCode,
+      httpStatusCode: result.$metadata.httpStatusCode,
     };
   }
 
