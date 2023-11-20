@@ -9,7 +9,7 @@ GET {{host}}/users
 
 ###
 # Get a single user
-GET {{host}}/users/c13a847a-32a0-4fc9-9e66-33f6cf2a4e23
+GET {{host}}/users/0ec681d1-125e-4308-b134-fe0f1a760a7a
 
 ###
 # Create a User
@@ -28,7 +28,7 @@ DELETE {{host}}/users/c13a847a-32a0-4fc9-9e66-33f6cf2a4e23
 
 ###
 # Update a user data
-PATCH {{host}}/users/c13a847a-32a0-4fc9-9e66-33f6cf2a4e23
+PATCH {{host}}/users/0ec681d1-125e-4308-b134-fe0f1a760a7a
 Content-Type: application/json
 
 {
