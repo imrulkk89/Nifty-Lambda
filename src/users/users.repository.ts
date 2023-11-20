@@ -11,7 +11,7 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-//import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -76,13 +76,13 @@ export class UsersRepository {
     return user;
   }
 
-  async update(data: User): Promise<any> {
+  async update(id: string, data: UpdateUserDto): Promise<any> {
     const body = JSON.stringify(data);
     const objKeys = Object.keys(body);
 
     const command = new UpdateItemCommand({
       TableName: this.tableName,
-      Key: marshall({ userId: data.userId }),
+      Key: marshall({ userId: id }),
       UpdateExpression: `SET ${objKeys
         .map((_, index) => `#key${index} = :value${index}`)
         .join(', ')}`,

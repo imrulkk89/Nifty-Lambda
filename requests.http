@@ -9,7 +9,7 @@ GET {{host}}/users
 
 ###
 # Get a single user
-GET {{host}}/users/383e61f8-86d6-11ee-a9a6-325096b39f47
+GET {{host}}/users/c13a847a-32a0-4fc9-9e66-33f6cf2a4e23
 
 ###
 # Create a User
@@ -23,4 +23,15 @@ Content-Type: application/json
 
 ###
 # Delete a user
-DELETE {{host}}/users/383e61f8-86d6-11ee-a9a6-325096b39f47
+DELETE {{host}}/users/c13a847a-32a0-4fc9-9e66-33f6cf2a4e23
+
+
+###
+# Update a user data
+PATCH {{host}}/users/c13a847a-32a0-4fc9-9e66-33f6cf2a4e23
+Content-Type: application/json
+
+{
+    "name": "Arafat Ali",
+    "email": "ali@email.com"
+}
