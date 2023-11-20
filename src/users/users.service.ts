@@ -7,23 +7,40 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(private readonly repository: UsersRepository) {}
 
-  create(createUserDto: CreateUserDto) {
-    return this.repository.create(createUserDto);
+  async create(createUserDto: CreateUserDto): Promise<any> {
+    const result = await this.repository.create(createUserDto);
+    return {
+      httpstatusCode: result.$metadata.httpStatusCode,
+    };
   }
 
-  findAll() {
-    return this.repository.findAll();
+  async findAll(): Promise<any> {
+    const result = await this.repository.findAll();
+    return {
+      httpStatusCode: result.$metadata.httpStatusCode || 200,
+      data: result,
+    };
   }
 
-  findOne(id: string) {
-    return this.repository.findById(id);
+  async findOne(id: string): Promise<any> {
+    const result = await this.repository.findById(id);
+    return {
+      httpStatusCode: result.$metadata.httpStatusCode || 200,
+      data: result,
+    };
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.repository.update(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<any> {
+    const result = await this.repository.update(id, updateUserDto);
+    return {
+      httpStatusCode: result.$metadata.httpStatusCode,
+    };
   }
 
-  remove(id: string) {
-    return this.repository.deleteById(id);
+  async remove(id: string): Promise<any> {
+    const result = await this.repository.deleteById(id);
+    return {
+      httpStatusCode: result.$metadata.httpStatusCode,
+    };
   }
 }

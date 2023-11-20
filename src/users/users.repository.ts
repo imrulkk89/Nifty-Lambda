@@ -77,7 +77,11 @@ export class UsersRepository {
   }
 
   async update(id: string, data: UpdateUserDto): Promise<any> {
-    const objKeys = Object.keys(data);
+    const body = {
+      ...data,
+      updatedAt: Number(new Date()),
+    };
+    const objKeys = Object.keys(body);
 
     const command = new UpdateItemCommand({
       TableName: this.tableName,
@@ -96,7 +100,7 @@ export class UsersRepository {
         objKeys.reduce(
           (acc, key, index) => ({
             ...acc,
-            [`:value${index}`]: data[key],
+            [`:value${index}`]: body[key],
           }),
           {},
         ),
